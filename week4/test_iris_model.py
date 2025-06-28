@@ -1,3 +1,4 @@
+
 import unittest
 import joblib
 import numpy as np
@@ -19,17 +20,21 @@ class TestIrisModel(unittest.TestCase):
         )
         # Expected labels for the test data
         self.expected_labels = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+        self.label_map = {
+            'setosa': 'Iris-setosa',
+            'versicolor': 'Iris-versicolor',
+            'virginica': 'Iris-virginica'
+        }
 
     def test_model_prediction(self):
-        # Test model predictions
         predictions = self.model.predict(self.test_data)
-        # Verify predictions match expected labels
-        self.assertEqual(list(predictions), self.expected_labels, "Predictions do not match expected labels")
-    
+        mapped_predictions = [self.label_map[p] for p in predictions]
+        self.assertEqual(mapped_predictions, self.expected_labels, "Predictions do not match expected labels")
+
     def test_model_accuracy(self):
-        # Test model accuracy on a small sample
         predictions = self.model.predict(self.test_data)
-        accuracy = accuracy_score(self.expected_labels, predictions)
+        mapped_predictions = [self.label_map[p] for p in predictions]
+        accuracy = accuracy_score(self.expected_labels, mapped_predictions)
         self.assertGreaterEqual(accuracy, 0.9, "Model accuracy is below 90%")
 
 if __name__ == '__main__':
